@@ -177,9 +177,18 @@ const BusinessOwnersSection = () => {
                         e.target.value
                       )
                     }
-                    className="w-full px-3 py-2 border rounded-md border-gray-300"
-                    placeholder="GH-00000000-0"
+                    className={`w-full px-3 py-2 border rounded-md ${
+                      /^GH-\d{9}-\d$/.test(owner.ghanaCardNumber)
+                        ? "border-gray-300"
+                        : "border-red-500"
+                    }`}
+                    placeholder="GH-000000000-0"
                   />
+                  {!/^GH-\d{9}-\d$/.test(owner.ghanaCardNumber) && (
+                    <p className="text-red-500 text-xs mt-1">
+                      Ghana Card Number must follow the format GH-000000000-0.
+                    </p>
+                  )}
                 </div>
 
                 {/* TIN */}

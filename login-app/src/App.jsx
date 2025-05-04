@@ -8,14 +8,8 @@ import CreateNewPasswordPage from "./Pages/CreateNewPasswordPage";
 import OTPVerificationPage from "./Pages/OTPVerificationPage";
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
 import TermsAndConditions from "./Pages/TermsAndConditions";
-import HomePage from "./Pages/HomePage"; // Import HomePage
+import HomePage from "./Pages/HomePage";
 import BusinessRegistrationForm from "./forms/BusinessRegistrationForm";
-import BusinessOwnersSection from "./forms/BusinessOwnersSection";
-import BusinessAddressSection from "./forms/BusinessAddressSection";
-import BusinessOperationDetailsSection from "./forms/BusinessOperationDetailsSection";
-import SupportingDocumentsSection from "./forms/SupportingDocumentsSection";
-import DeclarationsAndConsentSection from "./forms/DeclarationsAndConsentSection";
-import ConfirmationCard from "./forms/ConfirmationCard";
 
 function App() {
   return (
@@ -34,29 +28,6 @@ function App() {
           path="/business-registration-form"
           element={<BusinessRegistrationForm />}
         />
-        <Route
-          path="/registration-owners"
-          element={<BusinessOwnersSection />}
-        />
-        <Route
-          path="/registration-address"
-          element={<BusinessAddressSection />}
-        />
-        <Route
-          path="/registration-operation-details"
-          element={<BusinessOperationDetailsSection />}
-        />
-        <Route
-          path="/registration-document-details"
-          element={<SupportingDocumentsSection />}
-        />
-        <Route
-          path="/registration-declarations-consent"
-          element={<DeclarationsAndConsentSection />}
-        />
-        <Route path="/confirmation" element={<ConfirmationCard />} />
-
-        {/* Add more routes as needed */}
       </Routes>
     </Router>
   );

@@ -65,9 +65,9 @@ const BusinessAddressSection = () => {
       newErrors.email = "A valid email address is required.";
     }
 
-    if (!formData.phoneNumber || !/^233 \d{9}$/.test(formData.phoneNumber)) {
+    if (!formData.phoneNumber || !/^233\d{9}$/.test(formData.phoneNumber)) {
       newErrors.phoneNumber =
-        "Phone number must follow the format 233 203236379.";
+        "Phone number must follow the format 233203236379. It should be 11 digits long.";
     }
 
     setErrors(newErrors);
@@ -296,7 +296,7 @@ const BusinessAddressSection = () => {
                 className={`w-full px-3 py-2 border rounded-md ${
                   errors.phoneNumber ? "border-red-500" : "border-gray-300"
                 }`}
-                placeholder="233 203236379"
+                placeholder="233203236379"
               />
               {errors.phoneNumber && (
                 <p className="text-red-500 text-xs mt-1">
@@ -342,7 +342,7 @@ const BusinessAddressSection = () => {
                 value={formData.website}
                 onChange={(e) => handleChange("website", e.target.value)}
                 className="w-full px-3 py-2 border rounded-md border-gray-300"
-                placeholder="Enter website URL"
+                placeholder="https://example.com"
               />
             </div>
 

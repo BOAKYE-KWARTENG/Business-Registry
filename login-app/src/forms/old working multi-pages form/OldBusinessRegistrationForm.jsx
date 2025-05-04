@@ -1,8 +1,13 @@
 import React, { useState } from "react";
+import NextIcon from "../assets/next-arrow.svg";
 import Background from "../assets/Background.jpg";
 import Navbar from "../Components/Navbar";
+import ProgressBar from "../Components/ProgressBar"; // Import the ProgressBar component
+import { useNavigate } from "react-router-dom";
 
 const BusinessRegistrationForm = () => {
+  const navigate = useNavigate();
+
   // Form state
   const [formData, setFormData] = useState({
     businessName: "",
@@ -20,6 +25,12 @@ const BusinessRegistrationForm = () => {
   // Track active field for focus styling
   const [activeField, setActiveField] = useState("");
 
+  // Track current section (starting with section 1)
+  const [currentSection, setCurrentSection] = useState(1);
+
+  // Sections completion tracking
+  const [completedSections, setCompletedSections] = useState([]);
+
   // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,18 +44,6 @@ const BusinessRegistrationForm = () => {
       setErrors({
         ...errors,
         [name]: "",
-      });
-    }
-
-    // Real-time validation for alternative business name
-    if (
-      name === "businessNameAlt" &&
-      value.trim() === formData.businessName.trim()
-    ) {
-      setErrors({
-        ...errors,
-        businessNameAlt:
-          "Alternative business name cannot be the same as the business name",
       });
     }
   };
@@ -66,15 +65,6 @@ const BusinessRegistrationForm = () => {
     // Validate business name (more than 2 characters)
     if (!formData.businessName || formData.businessName.length <= 2) {
       newErrors.businessName = "Business name must be more than 2 characters";
-    }
-
-    // Validate alternative business name (should not be the same as business name)
-    if (
-      formData.businessNameAlt &&
-      formData.businessNameAlt.trim() === formData.businessName.trim()
-    ) {
-      newErrors.businessNameAlt =
-        "Alternative business name cannot be the same as the business name";
     }
 
     // Validate business type (required)
@@ -107,13 +97,21 @@ const BusinessRegistrationForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Example usage of validateForm
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (validateForm()) {
-      console.log("Form is valid. Submitting data:", formData);
-    } else {
-      console.log("Form has errors. Fix them before submitting.");
+      // Mark current section as completed
+      if (!completedSections.includes(currentSection)) {
+        setCompletedSections([...completedSections, currentSection]);
+      }
+
+      // Move to next section (in a real app, this would navigate to the next section)
+      setCurrentSection(currentSection + 1);
+
+      // For demo purposes, just log the data
+      console.log("Form data submitted:", formData);
     }
   };
 
@@ -133,6 +131,9 @@ const BusinessRegistrationForm = () => {
     "Finance",
   ];
 
+  // Progress bar sections
+  const sections = ["Step 1", "Step 2", "Step 3", "Step 4", "Step 5", "Step 6"];
+
   return (
     <div
       className="min-h-screen"
@@ -150,6 +151,13 @@ const BusinessRegistrationForm = () => {
           <h2 className="text-xl font-bold text-center py-4 bg-blue-50 border-b border-gray-200">
             REGISTER YOUR BUSINESS
           </h2>
+
+          {/* Use ProgressBar Component */}
+          <ProgressBar
+            sections={sections}
+            currentSection={currentSection}
+            completedSections={completedSections}
+          />
 
           <div className="flex flex-col md:flex-row">
             {/* Form Content - with original spacing restored */}
@@ -197,7 +205,7 @@ const BusinessRegistrationForm = () => {
                     className="block text-gray-700 text-sm font-bold mb-2"
                     htmlFor="businessNameAlt"
                   >
-                    Proposed Alternative Business Name
+                    Proposed Business Name (second option)
                   </label>
                   <input
                     type="text"
@@ -207,20 +215,14 @@ const BusinessRegistrationForm = () => {
                     onChange={handleChange}
                     onFocus={() => handleFocus("businessNameAlt")}
                     onBlur={handleBlur}
-                    className={`w-full px-3 py-2 border rounded-md ${
-                      errors.businessNameAlt
-                        ? "border-red-500"
-                        : activeField === "businessNameAlt"
-                        ? "border-blue-500 ring-1 ring-blue-500"
-                        : "border-gray-300"
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-md
+                      ${
+                        activeField === "businessNameAlt"
+                          ? "border-blue-500 ring-1 ring-blue-500"
+                          : "border-gray-300"
+                      }`}
                     placeholder="Enter alternative business name"
                   />
-                  {errors.businessNameAlt && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.businessNameAlt}
-                    </p>
-                  )}
                 </div>
 
                 {/* Two fields side by side: Business Type and Nature of Business */}
@@ -433,27 +435,15 @@ const BusinessRegistrationForm = () => {
                   </p>
                 </div>
 
-                {/* Submit Button */}
+                {/* Next Button */}
                 <div className="flex justify-end">
                   <button
-                    type="submit"
-                    className="flex items-center justify-center px-10 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-lg shadow-md hover:from-blue-600 hover:to-blue-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300"
+                    type="button"
+                    onClick={() => navigate("/registration-owners")}
+                    className="flex items-center justify-center px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
                   >
-                    <span className="mr-2">Submit</span>
-                    <svg
-                      className="w-5 h-5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 12h14M12 5l7 7-7 7"
-                      />
-                    </svg>
+                    Next
+                    <img src={NextIcon} alt="Next" className="ml-2 h-4 w-4" />
                   </button>
                 </div>
               </form>
